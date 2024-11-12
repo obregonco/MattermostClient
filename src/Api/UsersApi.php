@@ -8,6 +8,8 @@ use Http\Message\MultipartStream\MultipartStreamBuilder;
 use Pnz\MattermostClient\Exception\InvalidArgumentException;
 use Pnz\MattermostClient\Model\Status;
 use Pnz\MattermostClient\Model\Team\Teams;
+use Pnz\MattermostClient\Model\User\Token;
+use Pnz\MattermostClient\Model\User\Tokens;
 use Pnz\MattermostClient\Model\User\User;
 use Pnz\MattermostClient\Model\User\Users;
 use Pnz\MattermostClient\Model\User\UserStatus;
@@ -332,5 +334,16 @@ final class UsersApi extends HttpApi
         $response = $this->httpPostRaw(sprintf('/users/%s/image', $userId), $multipartStream, $headers);
 
         return $this->handleResponse($response, Status::class);
+    }
+
+    public function getUserTokens(string $userId)
+    {
+        if (empty($userId)) {
+            throw new InvalidArgumentException('UserId can not be empty');
+        }
+
+        $response = $this->httpGet(sprintf('/users/%s/tokens', $userId));
+
+        return $this->handleResponse($response, Tokens::class);
     }
 }
