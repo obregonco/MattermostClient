@@ -249,4 +249,28 @@ final class ChannelsApi extends HttpApi
 
         return $this->handleResponse($response, Posts::class);
     }
+
+   /**
+     * Update a user's roles for a channel.
+     *
+     * @see https://api.mattermost.com/#tag/channels/operation/UpdateChannelRoles%2Fput
+     */
+    public function updateChannelRoles(string $channelId, string $userId, array $roles): Status
+    {
+        if (empty($channelId)) {
+            throw new InvalidArgumentException('ChannelId can not be empty');
+        }
+        if (empty($userId)) {
+            throw new InvalidArgumentException('UserId can not be empty');
+        }
+
+        $body = [
+            'roles' => implode(' ', $roles),
+        ];
+
+        $response = $this->httpPut(sprintf('/channels/%s/members/%s/roles', $channelId, $userId), $body);
+
+        return $this->handleResponse($response, Status::class);
+    }
+
 }
