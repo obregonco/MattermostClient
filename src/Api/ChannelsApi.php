@@ -255,7 +255,7 @@ final class ChannelsApi extends HttpApi
      *
      * @see https://api.mattermost.com/#tag/channels/operation/UpdateChannelRoles%2Fput
      */
-    public function updateChannelRoles(string $channelId, string $userId, array $roles): Status
+    public function updateChannelRoles(string $channelId, string $userId, array|string $roles): Status
     {
         if (empty($channelId)) {
             throw new InvalidArgumentException('ChannelId can not be empty');
@@ -265,7 +265,7 @@ final class ChannelsApi extends HttpApi
         }
 
         $body = [
-            'roles' => implode(' ', $roles),
+            'roles' => is_array($roles) ? implode(' ', $roles) : $roles,
         ];
 
         $response = $this->httpPut(sprintf('/channels/%s/members/%s/roles', $channelId, $userId), $body);
