@@ -255,7 +255,7 @@ final class TeamsApi extends HttpApi
             throw new InvalidArgumentException('UserId can not be empty');
         }
 
-        $response = $this->httpGet(sprintf('/teams/%s/members/%s/roles', $teamId, $roles), [
+        $response = $this->httpPut(sprintf('/teams/%s/members/%s/roles', $teamId, $userId), [
             'roles' => $roles,
         ]);
 
