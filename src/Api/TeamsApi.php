@@ -235,4 +235,31 @@ final class TeamsApi extends HttpApi
 
         return $this->handleResponse($response, Team::class);
     }
+
+    /**
+     * Update a team member roles.
+     * Overwrites any previously assigned team roles.
+     *
+     * @param string                    $teamId The Team ID
+     * @param string $userId The User ID
+     * @param string $roles Valid team roles are "team_user", "team_admin" or both of them.
+     *
+     * @see https://api.mattermost.com/#tag/teams/operation/UpdateTeamMemberRoles
+     */
+    public function updateTeamMemberRoles(string $teamId, string $userId, string $roles): Status
+    {
+        if (empty($teamId)) {
+            throw new InvalidArgumentException('TeamID can not be empty');
+        }
+        if (empty($userId)) {
+            throw new InvalidArgumentException('UserId can not be empty');
+        }
+
+        $response = $this->httpGet(sprintf('/teams/%s/members/%s/roles', $teamId, $roles), [
+            'roles' => $roles,
+        ]);
+
+        return $this->handleResponse($response, Status::class);
+    }
+
 }
